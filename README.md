@@ -54,6 +54,7 @@ Intended use model:<br/>
  - onRequestPermissionsResult()
  - onSaveInstanceState()<br/>
 
+
 2. When the user is ready to display the photo picker, the Fragment should then call showImagePicker().
 
 I created the Helper interface since this allows for slightly more abstraction (in case of different PhotoHelper implementations), but also makes it easier to read which methods you must override and call delegate-style from your Fragment.
