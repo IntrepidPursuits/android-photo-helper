@@ -1,7 +1,5 @@
 apply plugin: 'jacoco'
 
-// TODO: currently test classes using PowerMock are not included in the test result
-
 jacoco {
     toolVersion = "0.7.7.201606060606"
 }
