@@ -1,7 +1,9 @@
 apply plugin: 'maven-publish'
 
 ext.localProperties = new Properties()
-ext.localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+if(project.rootProject.file('local.properties').exists()) {
+    ext.localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
 
 ext.getLocalProperty = { propertyName ->
     def property = localProperties.getProperty(propertyName)
