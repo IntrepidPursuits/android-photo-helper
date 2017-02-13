@@ -2,26 +2,26 @@
 
  <!-- Replace the 2 instances of "ios-template" in each of the links below with
       the name of your project in Jenkins. -->
-[![Build Status](http://ci.intrepid.io:8080/buildStatus/icon?job=android-photo-helper)](http://ci.intrepid.io:8080/job/android-photo-helper/)
-[![Coverage](http://ci.intrepid.io:9913/jenkins/cobertura/android-photo-helper/)](http://ci.intrepid.io:8080/job/android-photo-helper/cobertura/)
+[![Build Status](http://ci.intrepid.io:8080/buildStatus/icon?job=photo-helper-android)](http://ci.intrepid.io:8080/job/photo-helper-android/)
+[![Coverage](http://ci.intrepid.io:9913/jenkins/cobertura/hoto-helper-android/)](http://ci.intrepid.io:8080/job/photo-helper-android/cobertura/)
 
 This library wraps the default photo picker on Android with an easy-to-use API.
 ___
 # Table of Contents
 
 1. [Building](#building)
-	2. [Onboarding](#onboarding)
-	3. [Running](#running)
+	1. [Onboarding](#onboarding)
+	2. [Running](#running)
 2. [Testing](#testing)
 3. [Release](#release)
-	4. [Quirks](#quirks)
-	5. [Known Bugs](#known-bugs)
-6. [Architecture](#architecture)
-	7. [Data Flow](#data-flow)
-	8. [Core Technology #1](#core-technology-1)
-	9. [Core Technology #2](#core-technology-2)
-	8. [Third Party Libraries](#third-party-libraries)
-9. [History](#history)
+	1. [Quirks](#quirks)
+	2. [Known Bugs](#known-bugs)
+4. [Architecture](#architecture)
+	1. [Data Flow](#data-flow)
+	2. [Core Technology #1](#core-technology-1)
+	3. [Core Technology #2](#core-technology-2)
+	4. [Third Party Libraries](#third-party-libraries)
+5. [History](#history)
 
 ___
 
@@ -47,13 +47,14 @@ ___
 
 # Architecture
 PhotoContract.java contains the View, Presenter, and PhotoHelper interfaces (for use with the MVP structural pattern).<br/>
-Intended use model:<br/>
+Intended use model:
+
 1. The developer will instantiate the PhotoHelper in their Fragment class, and then pass all arguments from the following methods to the corresponding PhotoHelper methods:
+
  - onActivityResult()
  - onCreate()
  - onRequestPermissionsResult()
- - onSaveInstanceState()<br/>
-
+ - onSaveInstanceState()
 
 2. When the user is ready to display the photo picker, the Fragment should then call showImagePicker().
 
