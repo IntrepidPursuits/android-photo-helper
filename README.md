@@ -1,9 +1,7 @@
 # android-photo-helper
 
- <!-- Replace the 2 instances of "ios-template" in each of the links below with
-      the name of your project in Jenkins. -->
-[![Build Status](http://ci.intrepid.io:8080/buildStatus/icon?job=photo-helper-android)](http://ci.intrepid.io:8080/job/photo-helper-android/)
-[![Coverage](http://ci.intrepid.io:9913/jenkins/cobertura/hoto-helper-android/)](http://ci.intrepid.io:8080/job/photo-helper-android/cobertura/)
+[![Build Status](https://ci.intrepid.io/buildStatus/icon?job=photo-helper-android)](https://ci.intrepid.io/job/photo-helper-android/)
+[![Coverage](http://ci.intrepid.io:9913/jenkins/cobertura/hoto-helper-android/)](https://ci.intrepid.io/job/photo-helper-android/cobertura/)
 
 This library wraps the default photo picker on Android with an easy-to-use API.
 ___

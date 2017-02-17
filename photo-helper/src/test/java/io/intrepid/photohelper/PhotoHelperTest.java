@@ -12,13 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static io.intrepid.photohelper.PhotoHelper.CAMERA_IMAGE_FILE_PATH;
-import static io.intrepid.photohelper.PhotoHelper.REMOVE_UNUSED_PHOTOS;
 import static io.intrepid.photohelper.PhotoHelper.REQUEST_CODE_PICK_PHOTO;
 import static io.intrepid.photohelper.PhotoHelper.REQUEST_CODE_WRITE_STORAGE_PERMISSION;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -89,13 +88,10 @@ public class PhotoHelperTest {
         Bundle mockBundle = Mockito.mock(Bundle.class);
         final String SAVED_CAMERA_IMAGE_FILE_PATH = "path";
         when(mockBundle.getString(CAMERA_IMAGE_FILE_PATH)).thenReturn(SAVED_CAMERA_IMAGE_FILE_PATH);
-        final boolean SAVED_REMOVE_UNUSED_PHOTOS = true;
-        when(mockBundle.getBoolean(REMOVE_UNUSED_PHOTOS)).thenReturn(SAVED_REMOVE_UNUSED_PHOTOS);
 
         photoHelper.onCreate(mockBundle);
 
         verify(mockBundle).getString(CAMERA_IMAGE_FILE_PATH);
-        verify(mockBundle).getBoolean(REMOVE_UNUSED_PHOTOS);
     }
 
     @Test
@@ -109,7 +105,7 @@ public class PhotoHelperTest {
                                                new int[] { PackageManager.PERMISSION_GRANTED });
 
         verify(realPhotoHelper).showImagePickerIntent();
-        verify(mockPresenter, never()).logError(anyString(), (Exception) anyObject());
+        verify(mockPresenter, never()).logError(anyString(), any(Exception.class));
         verify(mockPresenter, never()).onPermissionDenied();
     }
 
@@ -126,26 +122,6 @@ public class PhotoHelperTest {
         verify(realPhotoHelper, never()).showImagePickerIntent();
         verify(mockView).getPermissionDeniedMessage();
         verify(mockPresenter).logError(PERMISSION_DENIED_MESSAGE, null);
-    }
-
-    @Test
-    public void onSaveInstanceState_dontRemoveUnusedPhotos() {
-        Bundle mockBundle = Mockito.mock(Bundle.class);
-
-        photoHelper.onSaveInstanceState(mockBundle);
-
-        verify(mockBundle).putBoolean(REMOVE_UNUSED_PHOTOS, false);
-    }
-
-    @Test
-    public void onSaveInstanceState_removeUnusedPhotos() {
-        // Re-initialize with passing true to remove used photos
-        photoHelper = spy(new PhotoHelper(mockFragment, mockView, true));
-        Bundle mockBundle = Mockito.mock(Bundle.class);
-
-        photoHelper.onSaveInstanceState(mockBundle);
-
-        verify(mockBundle).putBoolean(REMOVE_UNUSED_PHOTOS, true);
     }
 
     @Test

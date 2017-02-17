@@ -29,8 +29,6 @@ public class PhotoHelper implements PhotoContract.Helper {
     @VisibleForTesting
     static final String CAMERA_IMAGE_FILE_PATH = "camera_image_file_path";
     @VisibleForTesting
-    static final String REMOVE_UNUSED_PHOTOS = "remove_unused_photos";
-    @VisibleForTesting
     static final int REQUEST_CODE_PICK_PHOTO = 31;
     @VisibleForTesting
     static final int REQUEST_CODE_WRITE_STORAGE_PERMISSION = 45;
@@ -99,7 +97,6 @@ public class PhotoHelper implements PhotoContract.Helper {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             cameraImageFilePath = savedInstanceState.getString(CAMERA_IMAGE_FILE_PATH);
-            removeUnusedPhotos = savedInstanceState.getBoolean(REMOVE_UNUSED_PHOTOS);
         }
     }
 
@@ -123,8 +120,6 @@ public class PhotoHelper implements PhotoContract.Helper {
         if (cameraImageFilePath != null) {
             outState.putString(CAMERA_IMAGE_FILE_PATH, cameraImageFilePath);
         }
-
-        outState.putBoolean(REMOVE_UNUSED_PHOTOS, removeUnusedPhotos);
     }
 
     @Override
