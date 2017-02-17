@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+apply from: 'coverage.gradle'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "24.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "0.1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext.mavenGroupId = 'io.intrepid.photohelper'
+
+apply from: 'publish.gradle'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    def supportVersion = '25.1.1'
+    compile "com.android.support:support-annotations:$supportVersion"
+    compile "com.android.support:support-compat:$supportVersion"
+    compile "com.android.support:support-fragment:$supportVersion"
+
+    // Unit testing dependencies
+    def junitVersion = '4.12'
+    testCompile "junit:junit:$junitVersion"
+
+    // Set this dependency if you want to use Mockito
+    def mockitoVersion = '2.6.1'
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+
+    javadocDeps "com.android.support:support-annotations:$supportVersion"
+    javadocDeps "com.android.support:support-compat:$supportVersion"
+    javadocDeps "com.android.support:support-fragment:$supportVersion"
+}
