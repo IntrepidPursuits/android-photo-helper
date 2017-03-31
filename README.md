@@ -78,4 +78,5 @@ ___
 
 # History
 Library initially developed by Matthew Groves on 2/10/2017.
+<br>
 0.1.0 - Initial version published to internal maven repo on 3/31/2017
