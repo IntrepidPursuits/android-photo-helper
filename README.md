@@ -7,21 +7,33 @@ This library wraps the default photo picker on Android with an easy-to-use API.
 ___
 # Table of Contents
 
-1. [Building](#building)
+1. [Setup](#setup)
+2. [Building](#building)
 	1. [Onboarding](#onboarding)
 	2. [Running](#running)
-2. [Testing](#testing)
-3. [Release](#release)
+3. [Testing](#testing)
+4. [Release](#release)
 	1. [Quirks](#quirks)
 	2. [Known Bugs](#known-bugs)
-4. [Architecture](#architecture)
+5. [Architecture](#architecture)
 	1. [Data Flow](#data-flow)
 	2. [Core Technology #1](#core-technology-1)
 	3. [Core Technology #2](#core-technology-2)
 	4. [Third Party Libraries](#third-party-libraries)
-5. [History](#history)
+6. [History](#history)
 
 ___
+# Setup
+Add the following lines to your build.gradle file:
+```
+repositories {
+    maven { url "http://sorcerer.intrepid-dev.com:81/archiva/repository/android/" }
+}
+
+dependencies {
+    compile "io.intrepid.photohelper:photo-helper:0.1.0"
+}
+```
 
 # Building
 ## Onboarding
@@ -66,3 +78,4 @@ ___
 
 # History
 Library initially developed by Matthew Groves on 2/10/2017.
+0.1.0 - Initial version published to internal maven repo on 3/31/2017
