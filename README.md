@@ -31,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.intrepid.photohelper:photo-helper:0.1.0"
+    compile "io.intrepid.photohelper:photo-helper:0.1.1"
 }
 ```
 
@@ -80,3 +80,4 @@ ___
 Library initially developed by Matthew Groves on 2/10/2017.
 <br>
 0.1.0 - Initial version published to internal maven repo on 3/31/2017
+0.1.1 - Added the ability to use the photo helper with Activities as well (Guy Dupont) 6/2/2017
