@@ -59,16 +59,16 @@ ___
 PhotoContract.java contains the View, Presenter, and PhotoHelper interfaces (for use with the MVP structural pattern).<br/>
 Intended use model:
 
-1. The developer will instantiate the PhotoHelper in their Fragment class, and then pass all arguments from the following methods to the corresponding PhotoHelper methods:
+1. The developer will instantiate the PhotoHelper in their Fragment/Activity class, and then pass all arguments from the following methods to the corresponding PhotoHelper methods:
 
  - onActivityResult()
  - onCreate()
  - onRequestPermissionsResult()
  - onSaveInstanceState()
 
-2. When the user is ready to display the photo picker, the Fragment should then call showImagePicker().
+2. When the user is ready to display the photo picker, the Fragment/Activity should then call showImagePicker().
 
-I created the Helper interface since this allows for slightly more abstraction (in case of different PhotoHelper implementations), but also makes it easier to read which methods you must override and call delegate-style from your Fragment.
+I created the Helper interface since this allows for slightly more abstraction (in case of different PhotoHelper implementations), but also makes it easier to read which methods you must override and call delegate-style from your Fragment/Activity.
 
 ## Data Flow
 ## Core Technology 1

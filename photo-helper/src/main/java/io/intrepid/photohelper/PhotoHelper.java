@@ -2,6 +2,7 @@ package io.intrepid.photohelper;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
@@ -33,7 +35,8 @@ public class PhotoHelper implements PhotoContract.Helper {
     @VisibleForTesting
     static final int REQUEST_CODE_WRITE_STORAGE_PERMISSION = 45;
 
-    private Fragment fragment;
+    @NonNull
+    private final ContextDelegate contextDelegate;
     private PhotoContract.View view;
     @VisibleForTesting
     private boolean removeUnusedPhotos;
@@ -46,8 +49,57 @@ public class PhotoHelper implements PhotoContract.Helper {
      * @param view               - The {@link io.intrepid.photohelper.PhotoContract.View View} interface (may very likely be the {@link Fragment})
      * @param removeUnusedPhotos - If true, delete unused new photos that the user takes with the camera
      */
-    public PhotoHelper(@NonNull Fragment fragment, @NonNull PhotoContract.View view, boolean removeUnusedPhotos) {
-        this.fragment = fragment;
+    public PhotoHelper(@NonNull final Fragment fragment, @NonNull PhotoContract.View view, boolean removeUnusedPhotos) {
+        this(new ContextDelegate() {
+            @Override
+            public void requestPermissions(@NonNull String[] permissions, int requestCode) {
+                fragment.requestPermissions(permissions, requestCode);
+            }
+
+            @Override
+            @NonNull
+            public Context getContext() {
+                return fragment.getActivity();
+            }
+
+            @Override
+            public void startActivityForResult(@NonNull Intent intent, int requestCode) {
+                fragment.startActivityForResult(intent, requestCode);
+            }
+        }, view, removeUnusedPhotos);
+    }
+
+    /**
+     * Creates a PhotoHelper instance
+     *
+     * @param activity           - The {@link Activity} that will be calling the {@link PhotoHelper}
+     * @param view               - The {@link io.intrepid.photohelper.PhotoContract.View View} interface (may very likely be the {@link Fragment})
+     * @param removeUnusedPhotos - If true, delete unused new photos that the user takes with the camera
+     */
+    public PhotoHelper(@NonNull final Activity activity, @NonNull PhotoContract.View view, boolean removeUnusedPhotos) {
+        this(new ContextDelegate() {
+            @Override
+            public void requestPermissions(@NonNull String[] permissions, int requestCode) {
+                ActivityCompat.requestPermissions(activity, permissions, requestCode);
+            }
+
+            @Override
+            @NonNull
+            public Context getContext() {
+                return activity;
+            }
+
+            @Override
+            public void startActivityForResult(@NonNull Intent intent, int requestCode) {
+                activity.startActivityForResult(intent, requestCode);
+            }
+        }, view, removeUnusedPhotos);
+    }
+
+    private PhotoHelper(@NonNull ContextDelegate contextDelegate,
+                        @NonNull PhotoContract.View view,
+                        boolean removeUnusedPhotos) {
+        this.contextDelegate = contextDelegate;
         this.view = view;
         this.removeUnusedPhotos = removeUnusedPhotos;
     }
@@ -124,10 +176,10 @@ public class PhotoHelper implements PhotoContract.Helper {
 
     @Override
     public void showImagePicker() {
-        if (ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+        if (ContextCompat.checkSelfPermission(contextDelegate.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED) {
-            fragment.requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                                        REQUEST_CODE_WRITE_STORAGE_PERMISSION);
+            contextDelegate.requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                               REQUEST_CODE_WRITE_STORAGE_PERMISSION);
         } else {
             showImagePickerIntent();
         }
@@ -142,10 +194,11 @@ public class PhotoHelper implements PhotoContract.Helper {
         galleryIntent.setType("image/*");
 
         final List<Intent> extraIntents = new ArrayList<>();
+        Context context = contextDelegate.getContext();
         try {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (cameraIntent.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
-                File storageDir = fragment.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            if (cameraIntent.resolveActivity(context.getPackageManager()) != null) {
+                File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 File tempCameraImageFile = File.createTempFile(UUID.randomUUID().toString(), ".jpg", storageDir);
                 Uri uri = Uri.fromFile(tempCameraImageFile);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -157,8 +210,9 @@ public class PhotoHelper implements PhotoContract.Helper {
             view.getPhotoPresenter().logError(view.getIOExceptionMessage(), e);
         }
 
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, fragment.getString(view.getChooserLabel()));
+        final Intent chooserIntent = Intent.createChooser(galleryIntent,
+                                                          context.getString(view.getChooserLabel()));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents.toArray(new Parcelable[extraIntents.size()]));
-        fragment.startActivityForResult(chooserIntent, REQUEST_CODE_PICK_PHOTO);
+        contextDelegate.startActivityForResult(chooserIntent, REQUEST_CODE_PICK_PHOTO);
     }
 }

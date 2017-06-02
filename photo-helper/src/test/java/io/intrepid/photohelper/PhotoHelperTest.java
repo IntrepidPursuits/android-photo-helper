@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,20 +27,45 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PhotoHelperTest {
+@RunWith(Enclosed.class)
+public abstract class PhotoHelperTest {
     @Mock
     PhotoContract.View mockView;
     @Mock
     PhotoContract.Presenter<PhotoContract.View> mockPresenter;
-    @Mock
-    Fragment mockFragment;
+
+    @NonNull
+    protected abstract PhotoHelper getPhotoHelper();
 
     private PhotoContract.Helper photoHelper;
 
+    @RunWith(MockitoJUnitRunner.class)
+    public static class ActivityTest extends PhotoHelperTest {
+        @Mock
+        Activity mockActivity;
+
+        @NonNull
+        @Override
+        protected PhotoHelper getPhotoHelper() {
+            return new PhotoHelper(mockActivity, mockView, false);
+        }
+    }
+
+    @RunWith(MockitoJUnitRunner.class)
+    public static class FragmentTest extends PhotoHelperTest {
+        @Mock
+        Fragment mockFragment;
+
+        @NonNull
+        @Override
+        protected PhotoHelper getPhotoHelper() {
+            return new PhotoHelper(mockFragment, mockView, false);
+        }
+    }
+
     @Before
     public void setup() {
-        photoHelper = spy(new PhotoHelper(mockFragment, mockView, false));
+        photoHelper = spy(getPhotoHelper());
         when(mockView.getPhotoPresenter()).thenReturn(mockPresenter);
     }
 
