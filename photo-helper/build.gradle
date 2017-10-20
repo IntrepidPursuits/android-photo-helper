@@ -1,15 +1,16 @@
 apply plugin: 'com.android.library'
+apply plugin: "io.intrepid.static-analysis"
 apply from: 'coverage.gradle'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 2
-        versionName "0.1.1"
+        targetSdkVersion 26
+        versionCode 3
+        versionName "0.1.2"
     }
     buildTypes {
         release {
@@ -29,7 +30,7 @@ apply from: 'publish.gradle'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    def supportVersion = '25.3.1'
+    def supportVersion = '26.1.0'
     compile "com.android.support:support-annotations:$supportVersion"
     compile "com.android.support:support-compat:$supportVersion"
     compile "com.android.support:support-fragment:$supportVersion"
